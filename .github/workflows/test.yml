@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test remote-cache
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: shellcheck
+        uses: reviewdog/action-shellcheck@v1
+      - name: Run remote-cache with root path
+        uses: ./
+        with:
+          credentials: ${{ secrets.GCS_CREDENTIALS }}
+          source: 'test/sample.txt'
+          destination: ${{ secrets.GCS_BUCKET }}
+      - name: Run remote-cache with sub path
+        uses: ./
+        with:
+          credentials: ${{ secrets.GCS_CREDENTIALS }}
+          source: 'test/sample.txt'
+          destination: ${{ secrets.GCS_BUCKET }}/test

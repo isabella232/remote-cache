@@ -1,0 +1,23 @@
+name: Remote cache
+description: Remote cache storage for github actions
+author: tj-actions
+inputs:
+  credentials:
+    description: 'GCP credentials'
+    required: true
+  source:
+    description: 'Single path to upload or list of files'
+    required: true
+  destination:
+    description: 'GCS bucket name and an optional prefix path'
+    required: true
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  entrypoint: '/main.sh'
+  post-entrypoint: '/cleanup.sh'
+  post-if: 'success()'
+branding:
+  icon: upload-cloud
+  color: white
